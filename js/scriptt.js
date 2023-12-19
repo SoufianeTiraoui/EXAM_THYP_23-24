@@ -2,7 +2,6 @@ let globalData;
 const apiKey = 'WV0I3V4nNLKrmfZi1b77INV6ZhR642HP';
 const apiUrl = 'http://localhost/omeka-s/api/items?pretty_print=1';
 
-// Fetch the data and populate the dropdown
 fetch(apiUrl, {
     headers: {
         'Authorization': apiKey,
@@ -16,17 +15,7 @@ fetch(apiUrl, {
     populateSubjectsDropdown(data);
 })
 .catch(error => console.error('Erreur :', error));
-
-// Populate the subjects dropdown
-function populateSubjectsDropdown(data) {
-    let subjects = new Set();
-    data.forEach(item => {
-        if (item['dcterms:subject']) {
-            item['dcterms:subject'].forEach(subject => {
-                subjects.add(subject['@value']);
-            });
-        }
-    });
+function populateSubjectsDropdown(subjects) {
     const selectSubjects = document.getElementById('selectSubjects');
     subjects.forEach(subject => {
         const option = document.createElement('option');
@@ -36,7 +25,6 @@ function populateSubjectsDropdown(data) {
     });
 }
 
-// Filter items based on the selected subject
 function filterItems() {
     const selectedSubject = document.getElementById('selectSubjects').value;
     const filteredData = globalData.filter(item => {
